@@ -1,6 +1,7 @@
+/* biome-ignore-all lint/performance/useTopLevelRegex: test assertions use inline regex for clarity */
 import { render, screen } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
-import { InfiniteCarousel } from '@/components/InfiniteCarousel'
+import { InfiniteCarousel } from '@/components/infinite-carousel'
 
 const singleItem = [
   {

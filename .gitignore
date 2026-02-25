@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.next
 dist
 dist-ssr
 *.local
@@ -27,3 +28,4 @@ test-results
 *.njsproj
 *.sln
 *.sw?
+next-env.d.ts

@@ -1,6 +1,6 @@
 # Betty Infinite Carousel Task
 
-Interview implementation of a scroll-only infinite carousel in React + TypeScript.
+Interview implementation of a scroll-only infinite carousel in Next.js + TypeScript.
 
 ## Overview
 
@@ -27,7 +27,7 @@ This project focuses on building an infinite-feeling, high-performance carousel 
 
 - React 19
 - TypeScript
-- Vite
+- Next.js (App Router)
 - Tailwind CSS 4
 - Vitest + Testing Library
 - Playwright
@@ -52,7 +52,7 @@ cp .env.example .env
 Required:
 
 ```env
-VITE_PICSUM_API_BASE=https://picsum.photos
+NEXT_PUBLIC_PICSUM_API_BASE=https://picsum.photos
 ```
 
 ### 3. Run development server
@@ -61,13 +61,13 @@ VITE_PICSUM_API_BASE=https://picsum.photos
 npm run dev
 ```
 
-Open the local URL printed by Vite.
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Available Scripts
 
 - `npm run dev` - start development server
-- `npm run build` - type-check + production build
-- `npm run preview` - preview production build
+- `npm run build` - production build
+- `npm run start` - run production build locally
 - `npm run test` - run Vitest suite once
 - `npm run test:watch` - run Vitest in watch mode
 - `npm run test:e2e` - run Playwright tests
@@ -78,33 +78,37 @@ Open the local URL printed by Vite.
 ## Project Structure
 
 ```text
-src/
-  App.tsx
-  main.tsx
-  index.css
-  components/
-    InfiniteCarousel.tsx
-    CarouselSlide.tsx
-    CarouselState.tsx
-    CarouselErrorBoundary.tsx
-  hooks/
-    usePicsumImages.ts
-    useWheelRailMotion.ts
-  lib/
-    constants.ts
-    helpers.ts
-    picsum.ts
-  types/
-    carousel.ts
-    hooks.ts
-    picsum.ts
+app/
+  globals.css
+  layout.tsx
+  page.tsx
+
+components/
+  infinite-carousel.tsx
+  carousel-slide.tsx
+  carousel-state.tsx
+  carousel-error-boundary.tsx
+
+hooks/
+  use-picsum-images.ts
+  use-wheel-rail-motion.ts
+
+lib/
+  constants.ts
+  helpers.ts
+  picsum.ts
+
+types/
+  carousel.ts
+  hooks.ts
+  picsum.ts
 
 tests/
   unit/
     components/carousel/
     hooks/
     lib/
-    App.test.tsx
+    app.test.tsx
   e2e/
     carousel.spec.ts
 ```
@@ -113,12 +117,12 @@ tests/
 
 ### UI Layer
 
-- `src/App.tsx`
+- `app/page.tsx`
   - Composes data state + carousel UI.
   - Chooses between success UI (`InfiniteCarousel`) and status UI (`CarouselState`).
   - Wraps content with `CarouselErrorBoundary`.
 
-- `src/components/InfiniteCarousel.tsx`
+- `components/infinite-carousel.tsx`
   - Renders all real slides plus edge clones for loop continuity.
   - Pre-aligns the rail to the real segment before first visible frame.
   - Uses fixed frame sizing (`16:9`) and dynamic card width based on viewport breakpoints.
@@ -127,24 +131,24 @@ tests/
   - Keeps wheel motion active while cards are hovered/expanded.
   - Wires infinite loop bound correction and displays scroll hint.
 
-- `src/components/CarouselSlide.tsx`
+- `components/carousel-slide.tsx`
   - Renders each image with responsive attributes.
   - Falls back to `"Image unavailable"` on image error.
 
-- `src/components/CarouselState.tsx`
+- `components/carousel-state.tsx`
   - Loading and API-error UI with retry action.
 
-- `src/components/CarouselErrorBoundary.tsx`
+- `components/carousel-error-boundary.tsx`
   - Catches unexpected rendering errors and shows recovery UI.
 
 ### Behavior Layer
 
-- `src/hooks/usePicsumImages.ts`
+- `hooks/use-picsum-images.ts`
   - Fetch lifecycle: `loading | success | error`.
   - Abort-safe requests via `AbortController`.
   - Explicit `retry()` mechanism.
 
-- `src/hooks/useWheelRailMotion.ts`
+- `hooks/use-wheel-rail-motion.ts`
   - Handles wheel/trackpad translation to horizontal movement.
   - Applies frame throttle (`requestAnimationFrame`) with latest-event-wins behavior.
   - Uses axis dominance (`deltaX` vs `deltaY`) to infer intended horizontal movement.
@@ -152,12 +156,12 @@ tests/
 
 ### Logic Layer
 
-- `src/lib/picsum.ts`
+- `lib/picsum.ts`
   - Paged API fetching.
   - API payload mapping to app-level `CarouselItem`.
   - `srcSet` generation and aspect ratio derivation.
 
-- `src/lib/constants.ts`
+- `lib/constants.ts`
   - Scroll rail tuning constants:
     - `RAIL_WHEEL_GAIN`
     - `RAIL_HOVER_ACTIVATE_DELAY_MS`
@@ -165,7 +169,7 @@ tests/
     - `CAROUSEL_BREAKPOINTS`
     - `CAROUSEL_SLIDE_SIZES`
 
-- `src/lib/helpers.ts`
+- `lib/helpers.ts`
   - Motion math and measurements (`wheelDeltaToPixels`, `measureSlideStride`).
   - Loop utility:
     - `measureLoopSegmentWidth`
@@ -211,16 +215,16 @@ tests/
 
 ### Unit and Integration (Vitest)
 
-- `tests/unit/lib/api/picsum.test.ts`
+- `tests/unit/lib/picsum.test.ts`
   - API mapping, env validation, pagination, signal passing.
 
-- `tests/unit/hooks/usePicsumImages.test.ts`
+- `tests/unit/hooks/use-picsum-images.test.ts`
   - Lifecycle transitions, signal usage, unmount abort.
 
 - `tests/unit/components/carousel/*.test.tsx`
   - Carousel render behavior, fallback UI, accessibility semantics.
 
-- `tests/unit/App.test.tsx`
+- `tests/unit/app-page.test.tsx`
   - App-level smoke render.
 
 ### E2E (Playwright)
@@ -231,10 +235,10 @@ tests/
 
 ## Troubleshooting
 
-### Error: `Missing VITE_PICSUM_API_BASE`
+### Error: `Missing NEXT_PUBLIC_PICSUM_API_BASE`
 
 - Ensure `.env` exists and includes:
-  - `VITE_PICSUM_API_BASE=https://picsum.photos`
+  - `NEXT_PUBLIC_PICSUM_API_BASE=https://picsum.photos`
 
 ### E2E fails to start app server
 

@@ -10,7 +10,7 @@ export default defineConfig({
   use: {
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:4173',
     viewport: { width: 1920, height: 1080 },
     launchOptions: {
       args: ['--start-maximized', '--start-fullscreen'],
@@ -48,9 +48,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    port: 3000,
+    port: 4173,
     timeout: 120 * 1000,
-    command: 'pnpm run dev --port 3000 --strictPort',
-    reuseExistingServer: !process.env.CI,
+    command: 'pnpm exec next dev -p 4173',
+    reuseExistingServer: false,
   },
 })

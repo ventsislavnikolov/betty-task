@@ -1,8 +1,12 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.15/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "includes": [
-      "src/**",
+      "app/**",
+      "components/**",
+      "hooks/**",
+      "lib/**",
+      "types/**",
       "tests/**",
       "docs/**",
       "public/**",
@@ -52,5 +56,10 @@
     "parser": {
       "tailwindDirectives": true
     }
-  }
+  },
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next"
+  ]
 }

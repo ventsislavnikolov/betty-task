@@ -1,46 +1,47 @@
 export default {
-  branches: ["main"],
+  branches: ['main'],
   plugins: [
     [
-      "@semantic-release/commit-analyzer",
+      '@semantic-release/commit-analyzer',
       {
-        preset: "conventionalcommits",
+        preset: 'conventionalcommits',
         parserOpts: {
           // allow optional leading emoji + optional space
           headerPattern:
             /^(?:\p{Extended_Pictographic}\s*)?(\w+)(?:\(([^)]+)\))?: (.+)$/u,
-          headerCorrespondence: ["type", "scope", "subject"],
+          headerCorrespondence: ['type', 'scope', 'subject'],
         },
       },
     ],
-    "@semantic-release/release-notes-generator",
+    '@semantic-release/release-notes-generator',
     [
-      "@semantic-release/changelog",
+      '@semantic-release/changelog',
       {
-        changelogFile: "CHANGELOG.md",
+        changelogFile: 'CHANGELOG.md',
       },
     ],
     [
-      "@semantic-release/npm",
+      '@semantic-release/npm',
       {
         npmPublish: false,
       },
     ],
     [
-      "@semantic-release/git",
+      '@semantic-release/git',
       {
-        assets: ["dist/", "package.json", "CHANGELOG.md"],
+        assets: ['dist/', 'package.json', 'CHANGELOG.md'],
         message:
-          "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
+          /* biome-ignore lint/suspicious/noTemplateCurlyInString: semantic-release resolves these placeholders at runtime */
+          'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
       },
     ],
-    "@semantic-release/github",
+    '@semantic-release/github',
     [
-      "semantic-release-ado",
+      'semantic-release-ado',
       {
-        varName: "semanticVersion",
+        varName: 'semanticVersion',
         setOnlyOnRelease: false,
       },
     ],
   ],
-};
+}

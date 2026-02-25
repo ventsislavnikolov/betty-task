@@ -1,16 +1,17 @@
-import { fileURLToPath, URL } from 'node:url'
-import react from '@vitejs/plugin-react'
+import path from 'node:path'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [react()],
+  esbuild: {
+    jsx: 'automatic',
+  },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      components: fileURLToPath(new URL('./src/components', import.meta.url)),
-      hooks: fileURLToPath(new URL('./src/hooks', import.meta.url)),
-      lib: fileURLToPath(new URL('./src/lib', import.meta.url)),
-      types: fileURLToPath(new URL('./src/types', import.meta.url)),
+      '@': path.resolve(import.meta.dirname, './'),
+      components: path.resolve(import.meta.dirname, './components'),
+      hooks: path.resolve(import.meta.dirname, './hooks'),
+      lib: path.resolve(import.meta.dirname, './lib'),
+      types: path.resolve(import.meta.dirname, './types'),
     },
   },
   test: {

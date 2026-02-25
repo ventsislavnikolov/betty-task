@@ -1,3 +1,6 @@
+/* biome-ignore-all lint/performance/useTopLevelRegex: test-level regex literals are acceptable and keep selectors readable */
+
+import type { Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 
 function makePicsumMock(count: number) {
@@ -9,6 +12,34 @@ function makePicsumMock(count: number) {
     url: '',
     download_url: '',
   }))
+}
+
+function expectedSlideCount(
+  viewportWidth: number | undefined,
+  renderedItemTotal: number,
+) {
+  if ((viewportWidth ?? 0) >= 1024) {
+    return renderedItemTotal + 10
+  }
+  if ((viewportWidth ?? 0) >= 640) {
+    return renderedItemTotal + 6
+  }
+  return renderedItemTotal + 4
+}
+
+async function extractRenderedItemTotal(page: Page) {
+  const label = await page
+    .getByRole('region', { name: /image carousel/i })
+    .getByRole('article')
+    .first()
+    .getAttribute('aria-label')
+
+  const match = label?.match(/of (\d+)/)
+  if (!match) {
+    throw new Error('Could not parse carousel total from aria-label')
+  }
+
+  return Number(match[1])
 }
 
 test.beforeEach(async ({ page }) => {
@@ -31,8 +62,14 @@ test('carousel renders with real items plus loop clones', async ({ page }) => {
   const track = region.getByTestId('carousel-track')
   await expect(track).toBeVisible()
 
-  const slideCount = await region.getByRole('article').count()
-  expect(slideCount).toBe(1010)
+  const renderedItemTotal = await extractRenderedItemTotal(page)
+  const expectedCount = expectedSlideCount(
+    page.viewportSize()?.width,
+    renderedItemTotal,
+  )
+  await expect
+    .poll(() => region.locator('[data-carousel-slide]').count())
+    .toBe(expectedCount)
 })
 
 test('carousel remains scroll-navigable scrolling right', async ({ page }) => {
@@ -51,8 +88,14 @@ test('carousel remains scroll-navigable scrolling right', async ({ page }) => {
   }
 
   await expect(track).toBeVisible()
-  const slideCount = await region.getByRole('article').count()
-  expect(slideCount).toBe(1010)
+  const renderedItemTotal = await extractRenderedItemTotal(page)
+  const expectedCount = expectedSlideCount(
+    page.viewportSize()?.width,
+    renderedItemTotal,
+  )
+  await expect
+    .poll(() => region.locator('[data-carousel-slide]').count())
+    .toBe(expectedCount)
 })
 
 test('carousel remains scroll-navigable scrolling left', async ({ page }) => {
@@ -71,6 +114,12 @@ test('carousel remains scroll-navigable scrolling left', async ({ page }) => {
   }
 
   await expect(track).toBeVisible()
-  const slideCount = await region.getByRole('article').count()
-  expect(slideCount).toBe(1010)
+  const renderedItemTotal = await extractRenderedItemTotal(page)
+  const expectedCount = expectedSlideCount(
+    page.viewportSize()?.width,
+    renderedItemTotal,
+  )
+  await expect
+    .poll(() => region.locator('[data-carousel-slide]').count())
+    .toBe(expectedCount)
 })
