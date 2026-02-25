@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none" role="img" aria-label="Offline placeholder image">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B2622"/>
+      <stop offset="1" stop-color="#0F1211"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1320" cy="180" r="170" fill="#BB7A52" fill-opacity="0.18"/>
+  <circle cx="240" cy="690" r="210" fill="#7EC9A6" fill-opacity="0.14"/>
+  <rect x="420" y="320" width="760" height="260" rx="24" fill="#111816" fill-opacity="0.82" stroke="#E0B567" stroke-opacity="0.45" stroke-width="2"/>
+  <text x="800" y="430" fill="#F8F4EC" font-family="IBM Plex Sans, Arial, sans-serif" font-size="46" text-anchor="middle" letter-spacing="4">OFFLINE MODE</text>
+  <text x="800" y="490" fill="#C2BAAD" font-family="IBM Plex Sans, Arial, sans-serif" font-size="28" text-anchor="middle">Placeholder image rendered locally</text>
+  <text x="800" y="548" fill="#C2BAAD" font-family="IBM Plex Sans, Arial, sans-serif" font-size="24" text-anchor="middle">Reconnect to load remote photos</text>
+</svg>
